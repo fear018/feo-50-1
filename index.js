@@ -1,5 +1,3 @@
-// created newBranch
-// added changes to newBranch
 // =====> git
 // git - vcs - version control system
 
@@ -28,18 +26,17 @@
 // git status - показывает статус файлов в репозитории
 // git add - добавляет файлы в индекс
 // git commit -m "message" - добавляет коммит в репозиторий
-// git log - показывает историю коммитов
 // git checkout -b "branch-name" - создает новую ветку
-// git checkout "branch-name" - переключается на ветку
 // git branch - показывает список веток
-// git merge "branch-name" - сливает ветку с текущей и историю коммитов
-// git rebase "branch-name" - сливает ветку с текущей но без истории коммитов
-
 // git remote add origin "url" - добавляет удаленный репозиторий
-
 // git push -u origin master - отправляет изменения в удаленный репозиторий
 // git clone "url" - клонирует удаленный репозиторий
+
 // git pull - получает изменения с удаленного репозитория
+// git log - показывает историю коммитов
+// git checkout "branch-name" - переключается на ветку
+// git merge "branch-name" - сливает ветку с текущей и историю коммитов
+// git rebase "branch-name" - сливает ветку с текущей но без истории коммитов
 // git reset - отменяет изменения
 // git reset --hard - отменяет изменения и удаляет файлы
 // git reset --hard HEAD^ - отменяет последний коммит
@@ -116,14 +113,19 @@
 
 // Структура кода
 // Инструкции – это синтаксические конструкции и команды, которые выполняют действия.
-// console.log("Hello, World!");
-// alert("Hello, World!");
 // comments
 
 // Переменные
 // Переменная – это «именованное хранилище» для данных.
 // Мы можем использовать переменные для хранения товаров, посетителей и других данных.
 // let, const, var;
+// let message = "Hello, World!";
+// message = "QWERTY";
+// console.log(message);
+
+// const myBirthday = "18.04.1982";
+// myBirthday = "QWERTY";
+// console.log(myBirthday);
 
 // Имена переменных
 // В JavaScript есть два ограничения, касающиеся имён переменных:
@@ -139,58 +141,73 @@
 // объекты - object
 // number, bigint, string, boolean, null, undefined, symbol и object.
 
+// const number = 42;
+// console.log(number);
 // const bigInt = 1234567890123456789012345678901234567890n;
 // bigint больше 9007199254740991 или меньше -9007199254740991
 
-// let str = "Привет";
-// let str2 = 'Одинарные кавычки тоже подойдут';
+// let str = "Hello";
+// let str2 = "Одинарные кавычки тоже подойдут";
 // let phrase = `Обратные кавычки позволяют встраивать переменные ${str}`;
+// console.log(phrase);
+
+// true, false;
+// console.log(5 > 3);
 
 // null - представляет собой «ничего», «пусто» или «значение неизвестно».
 // let age = null;
 // undefined - означает, что «значение не было присвоено».
 // let age;
+// console.log(age);
 
 // typeof
-typeof undefined; // "undefined"
-typeof 0; // "number"
-typeof 10n; // "bigint"
-typeof true; // "boolean"
-typeof "foo"; // "string"
-typeof Symbol("id"); // "symbol"
-typeof Math; // "object"  (1)
-typeof null; // "object"  (2)
-typeof alert; // "function"  (3)
-
+// console.log(typeof undefined); // "undefined"
+// console.log(typeof 0); // "number"
+// console.log(typeof 10n); // "bigint"
+// console.log(typeof true); // "boolean"
+// console.log(typeof "foo"); // "string"
+// console.log(typeof Symbol("id")); // "symbol"
+// console.log(typeof null); // "object"  (2)
+// console.log(typeof Math); // "object"  (1)
+// console.log(typeof alert); // "function"  (3)
+// alert(typeof alert); // "function"
 // object для более сложных структур данных.
 
 // Взаимодействие: alert, prompt, confirm
+// alert("Hello");
+// const result = prompt("Are you here?");
+// console.log(result);
+// const result = confirm("Are you here?");
+// console.log(result);
 
 // Преобразование типов
 // Существует 3 наиболее широко используемых преобразования: строковое, численное и логическое.
 // Строковое преобразование
-// let value = true;
+// let value = 4;
 // console.log(typeof value); // boolean
+// console.log(value + 2); // boolean
+
 // value = String(value); // теперь value это строка "true"
 // console.log(typeof value); // string
+// console.log(value + 2); // string
 
 // Численное преобразование
 // Численное преобразование происходит в математических функциях и выражениях.
 // Например, когда операция деления / применяется не к числу:
 // console.log("6" / "2"); // 3, строки преобразуются в числа
 // Number('123');
-// console.log( Number("   123   ") ); // 123
-// console.log( Number("123z") );      // NaN (ошибка чтения числа на месте символа "z")
-// console.log( Number(true) );        // 1
-// console.log( Number(false) );       // 0
+// console.log(Number("   123   ")); // 123
+// console.log(Number("123z")); // NaN (ошибка чтения числа на месте символа "z")
+// console.log(Number(true)); // 1
+// console.log(Number(false)); // 0
 
 // Логическое преобразование
-// console.log( Boolean(1) ); // true
-// console.log( Boolean(0) ); // false
-// console.log( Boolean("Привет!") ); // true
-// console.log( Boolean("") ); // false
-// console.log( Boolean("0") ); // true
-// console.log( Boolean(" ") ); // пробел это тоже true (любая непустая строка это true)
+// console.log(Boolean(1)); // true
+// console.log(Boolean(0)); // false
+// console.log(Boolean("Привет!")); // true
+// console.log(Boolean("")); // false
+// console.log(Boolean("0")); // true
+// console.log(Boolean(" ")); // пробел это тоже true (любая непустая строка это true)
 
 // Базовые операторы, математика
 // Термины: «унарный», «бинарный», «операнд»
@@ -215,8 +232,10 @@ typeof alert; // "function"  (3)
 // Вычитание -,
 // Умножение *,
 // Деление /,
-// Взятие остатка от деления %, (5 % 2)
+// Взятие остатка от деления %,
+// console.log(5 % 2);
 // Возведение в степень **. (2 ** 3)
+// console.log(5 ** 3);
 
 // Сложение строк при помощи бинарного оператора + конкатенирует строки:
 // let s = "моя" + "строка";
@@ -234,6 +253,60 @@ typeof alert; // "function"  (3)
 // let oranges = "3";
 // console.log(apples + oranges);
 // console.log(+apples + +oranges);
+// console.log(Number(apples) + Number(oranges));
+
+// Операторы сравнения
+// Больше/меньше: a > b, a < b.
+// Больше/меньше или равно: a >= b, a <= b.
+// let a = 2;
+// let b = 3 == "3";
+// console.log(b);
+// let c = 3 === "3";
+// console.log(c);
+// let d = 3 !== 3;
+// console.log(d);
+
+// =, ==, ===, !=, !==
+// Равно: a == b. Обратите внимание, для сравнения используется двойной знак равенства ==. Один знак равенства a = b означал бы присваивание.
+// Не равно. В математике обозначается символом ≠, но в JavaScript записывается как a != b.
+// ===
+
+// Логические операторы
+// Оператор ИЛИ (||)
+// Оператор И (&&)
+// Оператор НЕ (!)
+
+// console.log("true || true", true || true); // true
+// console.log("false || true", false || true); // true
+// console.log("true || false", true || false); // true
+// console.log("false || false", false || false); // false
+
+// console.log("true && true", 5 === 5 && 4 === 4); // true
+// console.log("false && true", 5 === 4 && 4 === 4); // false
+// console.log("true && false", true && false); // false
+// console.log("false && false", false && false); // false
+
+// ========>
+
+// Оператор нулевого слияния (??)
+// Эта возможность была добавлена в язык недавно.
+// Оператор нулевого слияния представляет собой два вопросительных знака ??.
+
+// Он обрабатывает null и undefined
+
+// Результат выражения a ?? b будет следующим:
+// если a определено, то a,
+// если a не определено, то b.
+
+// let user;
+// console.log(user ?? "Аноним"); // Аноним (user не существует)
+
+// let user = "Иван";
+// console.log(user ?? "Аноним"); // Иван (user существует)
+
+// Условное ветвление: if, '?'
+// Инструкция «if»
+// if, else, else if, ?
 
 // Инкремент/декремент
 // Инкремент ++ увеличивает на 1
@@ -262,48 +335,6 @@ typeof alert; // "function"  (3)
 
 // console.log("Префиксная форма", incr2);
 // console.log("Префиксная форма", decr2);
-
-// Операторы сравнения
-// Больше/меньше: a > b, a < b.
-// Больше/меньше или равно: a >= b, a <= b.
-// Равно: a == b. Обратите внимание, для сравнения используется двойной знак равенства ==. Один знак равенства a = b означал бы присваивание.
-// Не равно. В математике обозначается символом ≠, но в JavaScript записывается как a != b.
-// ===
-
-// Условное ветвление: if, '?'
-// Инструкция «if»
-// if, else, else if, ?
-
-// Логические операторы
-// Оператор И (&&)
-// Оператор ИЛИ (||)
-// Оператор НЕ (!)
-
-// console.log("true || true", true || true); // true
-// console.log("false || true", false || true); // true
-// console.log("true || false", true || false); // true
-// console.log("false || false", false || false); // false
-
-// console.log("true && true", true && true); // true
-// console.log("false && true", false && true); // false
-// console.log("true && false", true && false); // false
-// console.log("false && false", false && false); // false
-
-// Оператор нулевого слияния (??)
-// Эта возможность была добавлена в язык недавно.
-// Оператор нулевого слияния представляет собой два вопросительных знака ??.
-
-// Он обрабатывает null и undefined
-
-// Результат выражения a ?? b будет следующим:
-// если a определено, то a,
-// если a не определено, то b.
-
-// let user;
-// console.log(user ?? "Аноним"); // Аноним (user не существует)
-
-// let user = "Иван";
-// console.log(user ?? "Аноним"); // Иван (user существует)
 
 // Циклы while, do ... while и for - 3 вида циклов:
 
