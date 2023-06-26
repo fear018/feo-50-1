@@ -1,3 +1,5 @@
+// created newBranch
+
 // =====> git
 // git - vcs - version control system
 
@@ -32,7 +34,9 @@
 // git branch - показывает список веток
 // git merge "branch-name" - сливает ветку с текущей и историю коммитов
 // git rebase "branch-name" - сливает ветку с текущей но без истории коммитов
+
 // git remote add origin "url" - добавляет удаленный репозиторий
+
 // git push -u origin master - отправляет изменения в удаленный репозиторий
 // git clone "url" - клонирует удаленный репозиторий
 // git pull - получает изменения с удаленного репозитория
