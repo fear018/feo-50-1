@@ -1,6 +1,19 @@
 // =====> git
 // git - vcs - version control system
 
+// STEPS:
+// 1. Скачать git - https://git-scm.com/downloads
+// 2. Установить git
+// 3. Настроить git config --global user.name "name" и git config --global user.email "email"
+// 4. Создать папку проекта делаем изменения в проекте
+// 5. Открыть терминал по адресу папки
+// 6. git init - инициализация git репозитория
+// 7. git add . - добавляет все файлы в индекс
+// 8. git commit -m "message" - добавляет коммит в ЛОКАЛЬНЫЙ РЕПОЗИТОРИЙ репозиторий
+// 9. Создать удаленный репозиторий на github
+// 10. git remote add origin "url" - добавляет удаленный репозиторий
+// 11. git push -u origin master - отправляет изменения в удаленный репозиторий
+
 // централизованная система контроля версий
 // есть центральный репозиторий
 // и каждый разработчик может вносить изменения в проект
@@ -286,7 +299,7 @@
 // console.log("true && false", true && false); // false
 // console.log("false && false", false && false); // false
 
-// ========>
+// ===================================>
 
 // Оператор нулевого слияния (??)
 // Эта возможность была добавлена в язык недавно.
@@ -298,7 +311,9 @@
 // если a определено, то a,
 // если a не определено, то b.
 
-// let user;
+// let name = "Иван";
+// let user = name ?? "Аноним";
+// console.log(user);
 // console.log(user ?? "Аноним"); // Аноним (user не существует)
 
 // let user = "Иван";
@@ -307,12 +322,38 @@
 // Условное ветвление: if, '?'
 // Инструкция «if»
 // if, else, else if, ?
+// const isMale = confirm("Ваш пол - мужской?"); // boolean value
+// let gender = null;
+
+// false
+// if (!isMale) {
+// true
+// if (isMale) {
+
+// if (isMale === true) {
+//   gender = "мужской";
+// } else {
+//   gender = "женский";
+// }
+
+// Тернарный оператор '?'
+// let result = условие ? значение1 : значение2;
+// let gender1 = isMale === true ? "мужской" : "женский";
+// let gender2 = isMale ? "мужской" : "женский";
+// let gender3 = !isMale ? "мужской" : "женский";
 
 // Инкремент/декремент
 // Инкремент ++ увеличивает на 1
 // Декремент -- уменьшает на 1
 // let counter = 2;
-// counter++;      // работает как counter = counter + 1, просто запись короче
+// console.log("INITIAL", counter);
+
+// Постфиксная форма
+// counter++;
+// console.log("Постфиксная", counter);
+
+// Префиксная форма
+// console.log("Префиксная", ++counter);
 
 // Префиксная и постфиксная формы
 // Постфиксная форма возвращает старое значение. !!!
@@ -344,42 +385,147 @@
 //   // код
 //   // также называемый "телом цикла"
 // }
+// counter = counter + 1;
+// let counter = 1;
+
+// while (counter < 5) {
+//   counter++;
+//   console.log("counter", counter);
+// }
 
 // do..while – Проверяет условие после каждой итерации.
 // do {
-//   // тело цикла
-// } while (condition);
+//   counter++;
+//   console.log("counter", counter);
+// } while (counter < 5);
 
 // for – Проверяет условие перед каждой итерацией.
 // for (начало; условие; шаг) {
 //   // ... тело цикла ...
 // }
 
-// for (let i = 0; i < 3; i++) { // выведет 0, затем 1, затем 2
+// for (let i = 0; i < 5; i++) {
 //   console.log(i);
 // }
 
 // continue и break
 // for (let i = 0; i < 10; i++) {
 //   // если true, пропустить оставшуюся часть тела цикла
-//   if (i % 2 == 0) continue;
+//   // if (i % 2 === 0) {
+//   if (i === 5) {
+//     break;
+//   }
 
-//   alert(i); // 1, затем 3, 5, 7, 9
+//   console.log(i); // 1, затем 3, 5, 7, 9
 // }
 
 // Конструкция "switch"
-// let a = 2 + 2;
+// let a = 5;
+
+// if (a === 3) {
+//   alert("Маловато");
+// } else if (a === 4) {
+//   alert("В точку!");
+// } else if (a === 5) {
+//   alert("Перебор");
+// } else {
+//   alert("Нет таких значений");
+// }
 
 // switch (a) {
 //   case 3:
-//     alert( 'Маловато' );
+//     alert("Маловато");
 //     break;
 //   case 4:
-//     alert( 'В точку!' );
+//     alert("В точку!");
 //     break;
 //   case 5:
-//     alert( 'Перебор' );
+//     alert("Перебор");
 //     break;
 //   default:
-//     alert( "Нет таких значений" );
+//     alert("Нет таких значений");
 // }
+
+// const str = "Hello, World!";
+// console.log(str);
+// console.log("length", str.length);
+// console.log("str[12] =>", str[12]);
+// console.log("str[13] =>", str[13]);
+
+// for (let char of "Hello, World!") {
+//   console.log(char); // H,e,l,l,o (char — сначала "H", потом "e", потом "l" и т.д.)
+// }
+
+// let str = "Widget with id";
+// console.log(str.indexOf("with"));
+
+// let str = "stringify";
+// 'strin', символы от 0 до 5 (не включая 5)
+// console.log(str.slice(0, 5));
+// // 's', от 0 до 1, не включая 1, т. е. только один символ на позиции 0
+// alert( str.slice(0, 1) );
+
+// const token = "Bearer 1234567890";
+// console.log(token.includes("Bearer"));
+// console.log(token.startsWith("earer"));
+// console.log(token.endsWith("90"));
+
+// includes, startsWith, endsWith
+// const number = 43;
+// console.log(number);
+// console.log(isNaN(number));
+
+// const pi = 3.1415926535;
+
+// console.log("pi", pi.toFixed(2));
+
+// console.log("pi", pi);
+// console.log("Math round", Math.round(pi));
+// console.log("Math round", Math.round(3.5));
+// console.log("Math floor", Math.floor(3.8));
+// console.log("Math ceil", Math.ceil(3.2));
+
+// const name = prompt("Введите имя");
+// const surname = prompt("Введите фамилию");
+// const patronymic = prompt("Введите отчество");
+// const age = +prompt("Введите возраст");
+// const days = age * 365;
+// const ageAfterFiveYears = age + 5;
+// const isMale = confirm("Ваш пол - мужской?"); // boolean value
+
+// let gender = null;
+// let pension = null;
+
+// if (isMale === true) {
+//   gender = "мужской";
+// } else {
+//   gender = "женский";
+// }
+
+// if (isMale === true && age >= 65) {
+//   pension = "да";
+// } else if (isMale === false && age >= 55) {
+//   pension = "да";
+// } else {
+//   pension = "нет";
+// }
+
+// alert(`
+//   Ваше ФИО: ${surname} ${name} ${patronymic}
+//   Ваш возраст в годах: ${age}
+//   Ваш возраст в днях: ${days}
+//   Через 5 лет вам будет: ${ageAfterFiveYears}
+//   Ваш пол: ${gender}
+//   Вы на пенсии: ${pension}
+// `);
+
+// Boolean(0); // false
+// !!0; // false
+
+// const message = "Hello, World!";
+// console.log(message);
+
+// console.log(message.toUpperCase());
+// console.log(message.toLowerCase());
+
+// console.log(message.length);
