@@ -529,3 +529,53 @@
 // console.log(message.toLowerCase());
 
 // console.log(message.length);
+// const q = {
+//   name: "Ivan",
+//   _name: this?.name,
+// };
+// q.hasOwnProperty("name"); // true
+// q.hasOwnProperty("_name"); // true
+// q.hasOwnProperty("age"); // false
+// const { name } = q;
+
+// const arr = ["a", "b", "c"];
+// const [a, b, c] = arr;
+// [...arr]
+
+// Группировка элементов массива по определенному критерию:
+
+// const products = [
+//   { id: 1, category: "electronics", price: 99.99 },
+//   { id: 2, category: "clothing", price: 49.99 },
+//   { id: 3, category: "electronics", price: 149.99 },
+//   { id: 4, category: "clothing", price: 29.99 },
+//   { id: 5, category: "appliances", price: 399.99 },
+//   { id: 6, category: "appliances", price: 799.99 },
+// ];
+
+// const groupedProducts = products.reduce((accumulator, product) => {
+//   if (!accumulator[product.category]) {
+//     accumulator[product.category] = [];
+//   }
+//   accumulator[product.category].push(product);
+//   return accumulator;
+// }, {});
+
+// console.log(products);
+// console.log(groupedProducts);
+
+// Вычисление общей стоимости товаров в корзине:
+// const cartItems = {
+//   products: [
+//     { id: 1, name: "Product 1", price: 9.99, quantity: 2 },
+//     { id: 2, name: "Product 2", price: 14.99, quantity: 1 },
+//     { id: 3, name: "Product 3", price: 4.99, quantity: 5 },
+//   ],
+//   totalPrice: 69.9,
+// };
+
+// const totalCost = cartItems.reduce(
+//   (accumulator, item) => accumulator + item.price * item.quantity,
+//   0
+// );
+// console.log(totalCost);
