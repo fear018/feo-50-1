@@ -1,0 +1,46 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  margin: 0 auto;
+  border: 2px solid;
+}
+
+input {
+  margin: 0.3rem;
+  padding: 0.5rem;
+  border: 2px solid purple;
+}
+
+#submitBtn {
+  margin: 0.3rem;
+  padding: 0.5rem;
+  border: 2px solid purple;
+  background-color: purple;
+  color: white;
+  cursor: pointer;
+}
+
+ul {
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column;
+  width: 50%;
+  margin: 0 auto;
+  padding: 1rem;
+  border: 2px solid purple;
+  list-style: none;
+}
+
+.user-card {
+  margin: 0.3rem;
+  padding: 0.5rem;
+  border: 2px solid purple;
+  border-radius: 3px;
+}
