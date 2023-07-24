@@ -1,62 +1,99 @@
-const drawUsers = (data, userList) => {
-  userList.innerHTML = "";
+const toggleModal = () => {
+  const modalWrapper = document.querySelector(".modalWrapper");
+  modalWrapper.classList.toggle("toggleModal");
+};
+
+const drawList = (data) => {
+  const todoList = document.querySelector("#todo-list");
+  todoList.innerHTML = "";
 
   data.forEach((item, index) => {
-    userList.innerHTML += `
-        <li class='user-card' id=${item.id} >
-          <p>#:${index + 1}</p>
-          <p>Name:${item.name}</p>
-          <p>Surname:${item.surname}</p>
-          <p>Age:${item.age}</p>
-          <div><button class="delete-user">DELETE</button></div>
+    todoList.innerHTML += `
+        <li class='card' id=${item.id} >
+          <p>#: ${index + 1}</p>
+          <p>Title: ${item.title}</p>
+          <p>Description: ${item.description}</p>
+          <div><button class="delete">DELETE</button></div>
+          <div><button class="edit">EDIT</button></div>
         </li>`;
   });
 };
 
-const submitHandler = () => {
-  const name = document.querySelector("#name");
-  const surname = document.querySelector("#surname");
-  const age = document.querySelector("#age");
+const submitHandler = (event, data) => {
+  event.preventDefault();
+  const title = document.querySelector("#title");
+  const description = document.querySelector("#description");
 
-  return {
+  data.push({
     id: Date.now(),
-    name: name.value,
-    surname: surname.value,
-    age: age.value,
-  };
+    title: title.value,
+    description: description.value,
+  });
+  drawList(data);
 };
 
 const deleteHandler = (event, data) => {
-  const li = event.target.closest(".user-card");
-  const userId = +li.id;
-  const newData = data.filter((item) => item.id !== userId);
-  return newData;
+  const cardId = +event.target.closest(".card").id;
+  const cardIndex = data.findIndex((item) => item.id === cardId);
+
+  data.splice(cardIndex, 1);
+  drawList(data);
+};
+
+const editHandler = (event, data) => {
+  const editTitle = document.querySelector("#editTitle");
+  const editDescription = document.querySelector("#editDescription");
+  const editBtn = document.querySelector("#editBtn");
+
+  const cardId = +event.target.closest(".card").id;
+  const card = data.find((item) => item.id === cardId);
+
+  editTitle.value = card.title;
+  editDescription.value = card.description;
+
+  toggleModal();
+
+  const editBtnHandler = () => {
+    const cardIndex = data.findIndex((item) => item.id === cardId);
+
+    data.splice(cardIndex, 1, {
+      id: cardId,
+      title: editTitle.value,
+      description: editDescription.value,
+    });
+
+    toggleModal();
+    drawList(data);
+
+    editBtn.removeEventListener("click", editBtnHandler);
+  };
+
+  editBtn.addEventListener("click", editBtnHandler);
 };
 
 const init = () => {
   let data = [];
   const submitBtn = document.querySelector("#submitBtn");
-  const userList = document.querySelector("#user-list");
-  const form = document.querySelector("#form");
+  const closeBtn = document.querySelector("#closeBtn");
+  const todoList = document.querySelector("#todo-list");
 
   submitBtn.addEventListener("click", (event) => {
-    event.preventDefault();
-    const user = submitHandler();
-    data.push(user);
-    drawUsers(data, userList);
-    form.reset();
+    submitHandler(event, data);
   });
 
-  userList.addEventListener("click", (event) => {
-    if (event.target.classList.contains("delete-user")) {
-      const newData = deleteHandler(event, data);
-      data = newData;
-      drawUsers(data, userList);
+  closeBtn.addEventListener("click", () => {
+    toggleModal();
+  });
+
+  todoList.addEventListener("click", (event) => {
+    if (event.target.classList.contains("delete")) {
+      deleteHandler(event, data);
+    }
+
+    if (event.target.classList.contains("edit")) {
+      editHandler(event, data);
     }
   });
 };
 
 init();
-// find index of user
-// const index = data.findIndex((item) => item.id === +userId);
-// data.splice(index, 1);

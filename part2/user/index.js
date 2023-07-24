@@ -1,59 +1,86 @@
 let data = [];
+let cardId = null;
 
 const submitBtn = document.querySelector("#submitBtn");
-const userList = document.querySelector("#user-list");
+const todoList = document.querySelector("#todo-list");
+const closeBtn = document.querySelector("#closeBtn");
+const editBtn = document.querySelector("#editBtn");
+const modalWrapper = document.querySelector(".modalWrapper");
+
+modalWrapper.addEventListener("click", (event) => {
+  if (!event.target.closest(".modal")) {
+    modalWrapper.style.display = "none";
+  }
+});
+
+closeBtn.addEventListener("click", () => {
+  modalWrapper.style.display = "none";
+});
+
+editBtn.addEventListener("click", () => {
+  const editTitle = document.querySelector("#editTitle");
+  const editDescription = document.querySelector("#editDescription");
+
+  const cardIndex = data.findIndex((item) => item.id === cardId);
+
+  data.splice(cardIndex, 1, {
+    id: cardId,
+    title: editTitle.value,
+    description: editDescription.value,
+  });
+
+  modalWrapper.style.display = "none";
+  drawList();
+});
+
+const drawList = () => {
+  todoList.innerHTML = "";
+
+  data.forEach((item, index) => {
+    todoList.innerHTML += `
+      <li class='card' id=${item.id} >
+        <p>#: ${index + 1}</p>
+        <p>Title: ${item.title}</p>
+        <p>Description: ${item.description}</p>
+        <div><button class="delete">DELETE</button></div>
+        <div><button class="edit">EDIT</button></div>
+      </li>`;
+  });
+};
 
 submitBtn.addEventListener("click", (event) => {
   event.preventDefault();
 
-  const name = document.querySelector("#name");
-  const surname = document.querySelector("#surname");
-  const age = document.querySelector("#age");
-
-  const user = {
+  const title = document.querySelector("#title");
+  const description = document.querySelector("#description");
+  const todoItem = {
     id: Date.now(),
-    name: name.value,
-    surname: surname.value,
-    age: age.value,
+    title: title.value,
+    description: description.value,
   };
 
-  data.push(user);
-
-  userList.innerHTML = "";
-
-  data.forEach((item, index) => {
-    userList.innerHTML += `
-      <li class='user-card' id=${item.id} >
-        <p>#:${index + 1}</p>
-        <p>Name:${item.name}</p>
-        <p>Surname:${item.surname}</p>
-        <p>Age:${item.age}</p>
-        <div><button class="delete-user">DELETE</button></div>
-      </li>`;
-  });
+  data.push(todoItem);
+  drawList();
 });
 
-userList.addEventListener("click", (event) => {
-  if (event.target.classList.contains("delete-user")) {
-    const li = event.target.closest(".user-card");
+todoList.addEventListener("click", (event) => {
+  if (event.target.classList.contains("delete")) {
+    const li = event.target.closest(".card");
     const userId = li.id;
 
     data = data.filter((item) => item.id !== +userId);
+    drawList();
+  }
 
-    userList.innerHTML = "";
+  if (event.target.classList.contains("edit")) {
+    modalWrapper.style.display = "block";
+    cardId = +event.target.closest(".card").id;
+    const card = data.find((item) => item.id === cardId);
 
-    data.forEach((item, index) => {
-      userList.innerHTML += `
-      <li class='user-card' id=${item.id} >
-      <p>#:${index + 1}</p>
-      <p>Name:${item.name}</p>
-      <p>Surname:${item.surname}</p>
-      <p>Age:${item.age}</p>
-      <div><button class="delete-user">DELETE</button></div>
-      </li>`;
-    });
+    const editTitle = document.querySelector("#editTitle");
+    const editDescription = document.querySelector("#editDescription");
+
+    editTitle.value = card.title;
+    editDescription.value = card.description;
   }
 });
-// find index of user
-// const index = data.findIndex((item) => item.id === +userId);
-// data.splice(index, 1);
