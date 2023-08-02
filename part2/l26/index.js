@@ -13,9 +13,12 @@
 // Например:
 // let map = new Map();
 
-// map.set("1", "str1");    // строка в качестве ключа
-// map.set(1, "num1");      // цифра как ключ
-// map.set(true, "bool1");  // булево значение как ключ
+// map.set("1", "str1"); // строка в качестве ключа
+// map.set(1, "num1"); // цифра как ключ
+// map.set(true, "bool1"); // булево значение как ключ
+// map.set([0, 1, 3, "asd", { asd: false }], "qwer");
+
+// console.log(map);
 
 // Объект Set – это особый вид коллекции: «множество» значений (без ключей),
 // где каждое значение может появляться только один раз.
@@ -28,29 +31,51 @@
 // set.clear() – удаляет все имеющиеся значения.
 // set.size – возвращает количество элементов в множестве.
 
-// let set = new Set();
-
 // let john = { name: "John" };
 // let pete = { name: "Pete" };
 // let mary = { name: "Mary" };
 
-// // считаем гостей, некоторые приходят несколько раз
+// let set = new Set();
+
+// // // считаем гостей, некоторые приходят несколько раз
+// set.add(john);
+// set.add(john);
 // set.add(john);
 // set.add(pete);
+// set.add(pete);
 // set.add(mary);
-// set.add(john);
 // set.add(mary);
+// set.add(mary);
+
+// console.log(set);
 
 // Date
 // getFullYear() Получить год (4 цифры)
-// getMonth() Получить месяц, от 0 до 11.
-// getDate() Получить день месяца, от 1 до 31, что несколько противоречит названию метода.
-// getHours(), getMinutes(), getSeconds(), getMilliseconds()
-// Получить, соответственно, часы, минуты, секунды или миллисекунды.
-// getFullYear() Year
-// getDay() Кроме того, можно получить определённый день недели
-// Date.now(); возвращает текущую метку времени – количество миллисекунд, прошедших с 1 января 1970 года
+// console.log("getFullYear", new Date().getFullYear());
+// // getMonth() Получить месяц, от 0 до 11.
+// console.log("getMonth", new Date().getMonth());
 
+// // getDate() Получить день месяца, от 1 до 31, что несколько противоречит названию метода.
+// console.log("getDate", new Date().getDate());
+
+// // getHours(), getMinutes(), getSeconds(), getMilliseconds()
+// console.log(
+//   "getHours",
+//   new Date().getHours(),
+//   "getMinutes",
+//   new Date().getMinutes(),
+//   "getSeconds",
+//   new Date().getSeconds(),
+//   "getMilliseconds",
+//   new Date().getMilliseconds()
+// );
+
+// Получить, соответственно, часы, минуты, секунды или миллисекунды.
+// getDay() Кроме того, можно получить определённый день недели
+// console.log("getDay", new Date().getDay());
+
+// // Date.now(); возвращает текущую метку времени – количество миллисекунд, прошедших с 1 января 1970 года
+// console.log(Date.now());
 // const options = {
 //   weekday: "long",
 //   year: "numeric",
@@ -58,7 +83,8 @@
 //   day: "numeric",
 // };
 
-// console.log(date.toLocaleString("de-DE", options));
+// console.log(new Date());
+// console.log(new Date().toLocaleString("de-DE", options));
 // "Donnerstag, 20. Dezember 2012"
 
 // Recursion
@@ -78,14 +104,17 @@
 
 // Рекурсивный способ: упрощение задачи и вызов функцией самой себя:
 // function pow(x, n) {
-//   if (n == 1) {
-//     return x;
+//   console.log("n", n);
+//   if (n === 1) {
+//     return x; // result
 //   } else {
+//     console.log("x else", x);
+//     console.log("n else", n);
 //     return x * pow(x, n - 1);
 //   }
 // }
 
-// alert( pow(2, 3) ); // 8
+// console.log("RESULT =>", pow(2, 3)); // 8
 
 // Замыкание это механизм, где
 // функция у которой есть доступ к своей внешней функции по области видимости,
@@ -95,11 +124,28 @@
 
 // пример замыкания
 // function setName(name) {
-
 //   return function () {
 //     return `${name} есть доступ к внешней переменной`;
 //   };
 // }
+
+// const nameInfo = setName("John");
+
+// // consol
+// console.log(nameInfo());
+
+// function plus(param) {
+//   return function (number) {
+//     return number + param;
+//   };
+// }
+
+// const getResultplus = plus(10);
+
+// console.log(getResultplus(10));
+// console.log(getResultplus(1));
+// console.log(getResultplus(2));
+// console.log(getResultplus(3));
 
 // Сборщик мусора
 // Большая часть алгоритмов сборки мусора основана на понятии ссылки.
@@ -114,25 +160,21 @@
 // Любое другое значение считается достижимым,
 // если оно доступно из корня по ссылке или по цепочке ссылок.
 
-// Существует 2 основных отличия var от let/const:
-
-// Переменные var не имеют блочной области видимости,
-// они ограничены, как минимум, телом функции.
-// Объявления (инициализация) переменных var производится
-// в начале исполнения функции (или скрипта для глобальных переменных).
+// Существует 1 основных отличия var от let/const: var
 
 // eval
 // let code = 'alert("Привет")';
-// eval(code);
+// eval('alert("Привет")');
 
 // Каррирование – это трансформация функций таким образом,
-// чтобы они принимали аргументы не как f(a, b, c), а как f(a)(b)(c).
+// чтобы они принимали аргументы не как
+// f(a, b, c), а как f(a)(b)(c).
 
 // Каррирование не вызывает функцию. Оно просто трансформирует её.
 
-// function curry(f) { // curry(f) выполняет каррирование
-//   return function(a) {
-//     return function(b) {
+// function curry(f) {
+//   return function (a) {
+//     return function (b) {
 //       return f(a, b);
 //     };
 //   };
@@ -149,10 +191,11 @@
 
 // Флаги и дескрипторы свойств
 // let user = {
-//   name: "John"
+//   name: "John",
 // };
 
-// let descriptor = Object.getOwnPropertyDescriptor(user, 'name');
+// let descriptor = Object.getOwnPropertyDescriptor(user, "name");
+// console.log(descriptor);
 /* дескриптор свойства:
 {
   "value": "John",
@@ -161,31 +204,25 @@
   "configurable": true - если false, то нельзя удалить свойство и менять его флаги
 }
 */
-
 // let user = {
-//   name: "John"
+//   name: "John",
 // };
 
 // Object.defineProperty(user, "name", {
-//   writable: false
+//   writable: false,
 // });
 
 // user.name = "Pete";
+// user.name = "df";
+// user.name = "Pete";
+// user.name = "df";
+// user.name = "we";
+// console.log(user);
 
 // Свойства - геттеры и сеттеры
 // Это свойства-аксессоры (accessor properties).
 // Свойства-аксессоры представлены методами: «геттер» – для чтения и «сеттер» – для записи.
 // При литеральном объявлении объекта они обозначаются get и set:
-
-// let obj = {
-//   get propName() {
-//     // геттер, срабатывает при чтении obj.propName
-//   },
-
-//   set propName(value) {
-//     // сеттер, срабатывает при записи obj.propName = value
-//   }
-// };
 
 // let user = {
 //   name: "John",
@@ -197,11 +234,13 @@
 
 //   set fullName(value) {
 //     [this.name, this.surname] = value.split(" ");
-//   }
+//   },
 // };
 
-// // set fullName запустится с данным значением
+// console.log(user.fullName); // John Smith
+// // // set fullName запустится с данным значением
 // user.fullName = "Alice Cooper";
+// console.log(user.fullName); // John Smith
 
 // alert(user.name); // Alice
 // alert(user.surname); // Cooper
