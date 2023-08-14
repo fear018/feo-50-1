@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./styles.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- <form id="form">
+      <div>ToDo form</div>
+      <input type="text" placeholder="Title:" id="title" />
+      <input type="text" placeholder="Description:" id="description" />
+      <button id="submitBtn">Submit</button>
+    </form> -->
+    <br />
+
+    <div class="todo-wrapper">
+      <div class="wrapper-item" id="todo">
+        <h3>ToDo list</h3>
+        <ul id="todo-list"></ul>
+        <form id="form-todo">
+          <div>ToDo form</div>
+          <input type="text" placeholder="Title:" id="title" />
+          <input type="text" placeholder="Description:" id="description" />
+          <button id="submitTodo">Submit</button>
+        </form>
+      </div>
+      <div class="wrapper-item" id="inProgress">
+        <h3>InProgress list</h3>
+        <ul id="inProgress-list"></ul>
+        <form id="form-inProgress">
+          <div>inProgress form</div>
+          <input type="text" placeholder="Title:" id="title" />
+          <input type="text" placeholder="Description:" id="description" />
+          <button id="submitInProgress">Submit</button>
+        </form>
+      </div>
+      <div class="wrapper-item" id="done">
+        <h3>Done list</h3>
+        <ul id="done-list"></ul>
+        <form id="form-done">
+          <div>done form</div>
+          <input type="text" placeholder="Title:" id="title" />
+          <input type="text" placeholder="Description:" id="description" />
+          <button id="submitDone">Submit</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="modalWrapper toggleModal">
+      <div class="modal">
+        <h3>Edit Modal</h3>
+        <input type="text" placeholder="Title:" id="editTitle" />
+        <input type="text" placeholder="Description:" id="editDescription" />
+        <button id="editBtn">Edit</button>
+        <button id="closeBtn">Close</button>
+      </div>
+    </div>
+
+    <script src="./index.js"></script>
+  </body>
+</html>

@@ -15,20 +15,20 @@
 //     result = todos;
 //   });
 
-const getPost = async () => {
-  const response = await fetch("https://reqres.in/api/users?page=1");
-  const result = await response.json(); // читаем ответ в формате JSON
+// const getPost = async () => {
+//   const response = await fetch("https://reqres.in/api/users?page=1");
+//   const result = await response.json(); // читаем ответ в формате JSON
 
-  return result;
-};
+//   return result;
+// };
 
-const init = async () => {
-  const result = await getPost();
+// const init = async () => {
+//   const result = await getPost();
 
-  console.log(result);
-};
+//   console.log(result);
+// };
 
-init();
+// init();
 
 // url – URL для отправки запроса.
 // options – дополнительные параметры: метод, заголовки и так далее.
