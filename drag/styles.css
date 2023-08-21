@@ -1,0 +1,20 @@
+* {
+  box-sizing: border-box;
+}
+
+.column {
+  width: 200px;
+  height: 300px;
+  margin-right: 1rem;
+  border: 5px solid black;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.element {
+  padding: 10px;
+  margin: 5px;
+  border: 1px solid blue;
+  background-color: #eef;
+  cursor: move;
+}
