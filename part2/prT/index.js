@@ -1,52 +1,153 @@
-const drawList = (data, wrapperId) => {
-  const list = document.querySelector(`#${wrapperId} ul`);
+const eventCommonHandler = (event, data, column, columnId) => {
+  switch (true) {
+    case event.target.classList.contains("list-plus-img"):
+      column.querySelector(".list-form").classList.toggle("form-hidden");
+      break;
+
+    case event.target.classList.contains("add-button"):
+      addToDoHandler(event, column, data, columnId);
+      break;
+
+    case event.target.classList.contains("delete"):
+      deleteAndRestoreHandler(event, data, columnId);
+      break;
+
+    case event.target.classList.contains("edit"):
+      toggleEditFormHandler(event, data, columnId);
+      break;
+
+    case event.target.classList.contains("save"):
+      saveEditFormHandler(event, data, columnId);
+      break;
+
+    case event.target.classList.contains("next"):
+      nextHandler(event, data, columnId);
+      break;
+  }
+};
+
+const drawList = (data, columnId) => {
+  const count = document.querySelector(`#${columnId} small`);
+  const list = document.querySelector(`#${columnId} ul`);
   list.innerHTML = "";
 
-  data[wrapperId].forEach((item, index) => {
+  count.innerHTML = `Count: ${data[columnId].length}`;
+
+  data[columnId].forEach((item) => {
     list.innerHTML += `
-        <li class='card' id=${item.id} >
-          <p>#: ${index + 1}</p>
-          <p>Title: ${item.title}</p>
-          <p>Description: ${item.description}</p>
+      <li class="list-item" id=${item.id}>
+        <p class="text">Title: ${item.title}</p>
+        <p class="text">Description: ${item.description}</p>
+
+        <div class="buttons">
           ${
-            wrapperId === "done"
-              ? `<div><button class="restore">RESTORE</button></div>`
-              : `<div><button class="delete">DELETE</button></div>
-              <div><button class="edit">EDIT</button></div>`
+            columnId !== "deleted"
+              ? `<button class="button edit">Edit</button>
+                <button class="button delete">Delete</button>
+                <button class="button next">Next</button>`
+              : `<button class="button restore">Restore</button>`
           }
-        </li>`;
+          
+        </div>
+      </li>`;
   });
 };
 
-const submitHandler = (event, data) => {
+const deleteAndRestoreHandler = (event, data, columnId, restore = false) => {
+  const listId = restore ? "deleted" : columnId;
+  const listPushId = restore ? "todo" : "deleted";
+
+  const id = event.target.closest(".list-item").id;
+  const item = data[listId].find((item) => item.id === +id);
+
+  data[listId] = data[listId].filter((item) => item.id !== +id);
+  data[listPushId].push(item);
+
+  drawList(data, restore ? "todo" : listId);
+  drawList(data, "deleted");
+};
+
+const addToDoHandler = (event, column, data, columnId) => {
   event.preventDefault();
+  const title = column.querySelector(`#${columnId}-title`);
+  const description = column.querySelector(`#${columnId}-description`);
 
-  const wrapper = event.target.closest(".wrapper-item");
-  const wrapperId = wrapper.id;
-  const title = wrapper.querySelector("#title");
-  const description = wrapper.querySelector("#description");
-
-  data[wrapperId].push({
+  data[columnId].push({
     id: Date.now(),
     title: title.value,
     description: description.value,
   });
 
-  drawList(data, wrapperId);
+  column.querySelector(".list-form").classList.toggle("form-hidden");
+
+  drawList(data, columnId);
 };
 
-const deleteHandler = (event, data) => {
-  const wrapper = event.target.closest(".wrapper-item");
-  const wrapperId = wrapper.id;
-  const id = event.target.closest(".card").id;
+const toggleEditFormHandler = (event, data, columnId) => {
+  const listItem = event.target.closest(".list-item");
 
-  const item = data[wrapperId].find((item) => item.id === +id);
+  if (listItem.querySelector(".edit-form")) {
+    listItem.querySelector(".edit-form").remove();
+    return;
+  }
 
-  data[wrapperId] = data[wrapperId].filter((item) => item.id !== +id);
-  data.done.push(item);
+  const id = listItem.id;
+  const item = data[columnId].find((item) => item.id === +id);
 
-  drawList(data, wrapperId);
-  drawList(data, "done");
+  listItem.insertAdjacentHTML(
+    "beforeend",
+    `<form class="edit-form">
+      <input type="text" name="title" value="${item.title}">
+      <input type="text" name="description" value="${item.description}">
+      <button class="button save" type="submit">Save</button>
+    </form>`
+  );
+};
+
+const saveEditFormHandler = (event, data, columnId) => {
+  event.preventDefault();
+  const listItem = event.target.closest(".list-item");
+  const listItemId = listItem.id;
+
+  const item = data[columnId].find((item) => item.id === +listItemId);
+  const itemIndex = data[columnId].findIndex((item) => item.id === +listItemId);
+
+  const title = listItem.querySelector(`input[name="title"]`);
+  const description = listItem.querySelector(`input[name="description"]`);
+
+  data[columnId].splice(itemIndex, 1, {
+    ...item,
+    title: title.value,
+    description: description.value,
+  });
+
+  listItem.querySelector(".edit-form").remove();
+  drawList(data, columnId);
+};
+
+const nextHandler = (event, data, columnId) => {
+  const id = event.target.closest(".list-item").id;
+  const item = data[columnId].find((item) => item.id === +id);
+
+  data[columnId] = data[columnId].filter((item) => item.id !== +id);
+
+  if (columnId === "todo") {
+    data.inProgress.push(item);
+  } else if (columnId === "inProgress") {
+    data.done.push(item);
+  } else {
+    data.deleted.push(item);
+  }
+
+  drawList(data, columnId);
+  drawList(
+    data,
+    columnId === "todo"
+      ? "inProgress"
+      : columnId === "inProgress"
+      ? "done"
+      : "deleted"
+  );
 };
 
 const init = () => {
@@ -54,23 +155,23 @@ const init = () => {
     todo: [],
     inProgress: [],
     done: [],
+    deleted: [],
   };
 
-  const submitTodo = document.querySelector("#submitTodo");
-  const submitInProgress = document.querySelector("#submitInProgress");
-  const todoList = document.querySelector("#todo-list");
+  const columns = [...document.querySelectorAll(".сolumn")];
+  const deleted = document.querySelector("#deleted");
 
-  submitTodo.addEventListener("click", (event) => {
-    submitHandler(event, data);
+  columns.forEach((column) => {
+    if (column.id !== "deleted") {
+      column.addEventListener("click", (event) => {
+        eventCommonHandler(event, data, column, column.id);
+      });
+    }
   });
 
-  submitInProgress.addEventListener("click", (event) => {
-    submitHandler(event, data);
-  });
-
-  todoList.addEventListener("click", (event) => {
-    if (event.target.classList.contains("delete")) {
-      deleteHandler(event, data);
+  deleted.addEventListener("click", (event) => {
+    if (event.target.classList.contains("restore")) {
+      deleteAndRestoreHandler(event, data, "deleted", true);
     }
   });
 };

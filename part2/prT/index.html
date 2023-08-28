@@ -7,57 +7,63 @@
     <title>Document</title>
   </head>
   <body>
-    <!-- <form id="form">
-      <div>ToDo form</div>
-      <input type="text" placeholder="Title:" id="title" />
-      <input type="text" placeholder="Description:" id="description" />
-      <button id="submitBtn">Submit</button>
-    </form> -->
-    <br />
+    <h1>TODO List</h1>
 
-    <div class="todo-wrapper">
-      <div class="wrapper-item" id="todo">
-        <h3>ToDo list</h3>
-        <ul id="todo-list"></ul>
-        <form id="form-todo">
-          <div>ToDo form</div>
-          <input type="text" placeholder="Title:" id="title" />
-          <input type="text" placeholder="Description:" id="description" />
-          <button id="submitTodo">Submit</button>
+    <div class="todo-list">
+      <div class="сolumn" id="todo">
+        <h3 class="list-title">To Do</h3>
+        <div class="сolumn-title">
+          <img src="./images/plus.svg" alt="plus" class="list-plus-img" />
+          <small>Count: 0</small>
+        </div>
+        <form class="list-form form-hidden">
+          <input type="text" placeholder="Title:" id="todo-title" />
+          <input type="text" placeholder="Description:" id="todo-description" />
+          <button class="button add-button">Add Task</button>
         </form>
+        <ul class="list"></ul>
       </div>
-      <div class="wrapper-item" id="inProgress">
-        <h3>InProgress list</h3>
-        <ul id="inProgress-list"></ul>
-        <form id="form-inProgress">
-          <div>inProgress form</div>
-          <input type="text" placeholder="Title:" id="title" />
-          <input type="text" placeholder="Description:" id="description" />
-          <button id="submitInProgress">Submit</button>
+
+      <div class="сolumn" id="inProgress">
+        <h3 class="list-title">In Progress</h3>
+        <div class="сolumn-title">
+          <img src="./images/plus.svg" alt="plus" class="list-plus-img" />
+          <small>Count: 0</small>
+        </div>
+        <form class="list-form form-hidden">
+          <input type="text" placeholder="Title:" id="inProgress-title" />
+          <input
+            type="text"
+            placeholder="Description:"
+            id="inProgress-description"
+          />
+          <button class="button add-button">Add Task</button>
         </form>
+        <ul class="list"></ul>
       </div>
-      <div class="wrapper-item" id="done">
-        <h3>Done list</h3>
-        <ul id="done-list"></ul>
-        <form id="form-done">
-          <div>done form</div>
-          <input type="text" placeholder="Title:" id="title" />
-          <input type="text" placeholder="Description:" id="description" />
-          <button id="submitDone">Submit</button>
+
+      <div class="сolumn" id="done">
+        <h3 class="list-title">Done</h3>
+        <div class="сolumn-title">
+          <img src="./images/plus.svg" alt="plus" class="list-plus-img" />
+          <small>Count: 0</small>
+        </div>
+        <form class="list-form form-hidden">
+          <input type="text" placeholder="Title:" id="done-title" />
+          <input type="text" placeholder="Description:" id="done-description" />
+          <button class="button add-button">Add Task</button>
         </form>
+        <ul class="list"></ul>
+      </div>
+
+      <div class="сolumn" id="deleted">
+        <h3 class="list-title">Deleted</h3>
+        <div class="сolumn-title">
+          <small>Count: 0</small>
+        </div>
+        <ul class="list"></ul>
       </div>
     </div>
-
-    <div class="modalWrapper toggleModal">
-      <div class="modal">
-        <h3>Edit Modal</h3>
-        <input type="text" placeholder="Title:" id="editTitle" />
-        <input type="text" placeholder="Description:" id="editDescription" />
-        <button id="editBtn">Edit</button>
-        <button id="closeBtn">Close</button>
-      </div>
-    </div>
-
     <script src="./index.js"></script>
   </body>
 </html>
