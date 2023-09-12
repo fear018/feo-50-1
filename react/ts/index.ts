@@ -1,458 +1,286 @@
-// Зачем нужен TypeScript?
-// TypeScript — это язык программирования, который является надстройкой над JavaScript.
-// Он добавляет статическую типизацию, классы, интерфейсы и другие возможности, которых нет в JavaScript.
+interface IEvent {
+  target: EventTarget | null;
+  preventDefault: () => void;
+}
 
-// Компилятор. TypeScript обладает компилятором с открытым исходным кодом,
-// он является кросс-платформенным, с открытой спецификацией, и написан на TypeScript.
-// Компилятор выполняет преобразование TypeScript-кода в JavaScript-код.
-// Кроме того, если с программой что-то не так, он выдаёт сообщения об ошибках.
+type TColumnIds = "todo" | "inProgress" | "done" | "deleted";
 
-// Как установить TypeScript?
-// npm install -g typescript
+interface ITodoItem {
+  id: number;
+  title: string;
+  description: string;
+}
 
-// Инициализация проекта TypeScript
-// tsc --init
+interface IData {
+  todo: ITodoItem[];
+  inProgress: ITodoItem[];
+  done: ITodoItem[];
+  deleted: ITodoItem[];
+}
 
-// Как запустить TypeScript?
-// tsc index.ts
+const eventCommonHandler = (
+  event: IEvent,
+  data: IData,
+  column: Element,
+  columnId: TColumnIds
+): void => {
+  const element = event.target as HTMLElement;
 
-// Установка ts-node для запуска TypeScript в Node.js
-// npm install -g ts-node
-// npx ts-node index.ts
+  switch (true) {
+    case element.classList.contains("list-plus-img"):
+      const form: Element | null = column.querySelector(".list-form");
 
-// console.log("Hello TypeScript!");
+      form?.classList.toggle("form-hidden");
+      break;
 
-// Типы данных с примерами
-// string
-let str: string = "Hello TypeScript!";
-// number
-let num: number = 42;
-// boolean
-let isTrue: boolean = true;
-// null
-let nullVar: null = null;
-// undefined
-let undefinedVar: undefined = undefined;
-// symbol
-// let sym: symbol = Symbol();
+    case element.classList.contains("add-button"):
+      addToDoHandler(event, column, data, columnId);
+      break;
 
-// object
-let obj: object = {};
+    case element.classList.contains("delete"):
+      deleteAndRestoreHandler(event, data, columnId);
+      break;
 
-const user1: {
-  name: string;
-  sername?: string; // необязательный параметр
-  age: number | string | null; // объединение типов
-} = {
-  name: "Ivan",
-  age: 25,
+    case element.classList.contains("edit"):
+      toggleEditFormHandler(event, data, columnId);
+      break;
+
+    case element.classList.contains("save"):
+      saveEditFormHandler(event, data, columnId);
+      break;
+
+    case element.classList.contains("next"):
+      nextHandler(event, data, columnId);
+      break;
+  }
 };
 
-user1.sername = "null";
+const drawList = (data: IData, columnId: TColumnIds): void => {
+  const count: Element | null = document.querySelector(`#${columnId} small`);
+  const list: Element | null = document.querySelector(`#${columnId} ul`);
 
-// array - массив
-let arr: string[] = ["a", "5", "c"];
-let arr2: Array<string | number> = ["a", 5, "c"];
+  if (!list || !count) return;
 
-// tuple - кортеж, массив с фиксированным количеством элементов
-let coordinates: [string, number] = ["50.4501", 30.5234];
+  list.innerHTML = "";
 
-// any - любой тип данных
-let anyVar: any = "any";
-anyVar = 42;
-anyVar = true;
-anyVar = {};
-anyVar = [];
-anyVar = "null";
+  count.innerHTML = `Count: ${data[columnId].length}`;
 
-// unknown - Аналог типа any, но более безопасный. Нужно явно привести к нужному типу перед использованием.
-let userInput: unknown = "Hello";
-let userName: string = userInput as string;
+  data[columnId].forEach(({ id, title, description }: ITodoItem) => {
+    list.innerHTML += `
+      <li class="list-item" id=${id}>
+        <p class="text">Title: ${title}</p>
+        <p class="text">Description: ${description}</p>
 
-// // void - функция ничего не возвращает
-function sayMyName(name: string, age: number): void {
-  // console.log(name);
-}
-
-sayMyName("Ivan", 25);
-
-const sayMyName2 = (name: string): string => {
-  console.log(name);
-
-  return name;
+        <div class="buttons">
+          ${
+            columnId !== "deleted"
+              ? `<button class="button edit">Edit</button>
+                <button class="button delete">Delete</button>
+                <button class="button next">Next</button>`
+              : `<button class="button restore">Restore</button>`
+          }
+          
+        </div>
+      </li>`;
+  });
 };
 
-// never - Для указания, что функция не завершает выполнение и не возвращает значения.
-function throwError(message: string): never {
-  throw new Error(message);
-}
+const deleteAndRestoreHandler = (
+  event: IEvent,
+  data: IData,
+  columnId: TColumnIds,
+  restore: boolean = false
+): void => {
+  const listId: TColumnIds = restore ? "deleted" : columnId;
+  const listPushId: "todo" | "deleted" = restore ? "todo" : "deleted";
+  const element = event.target as HTMLElement;
 
-// Type - Для создания пользовательских типов данных.
-type TUserId = string | number;
-let id1: TUserId = 1234;
-let id2: TUserId = "1234";
+  const id: string | undefined = element.closest(".list-item")?.id;
+  if (!id) return;
 
-// literal - литералы
-type TEasing = "ease-in" | "ease-out" | "ease-in-out";
-let animation: TEasing = "ease-in";
-animation = "ease-out";
+  const item: ITodoItem | undefined = data[listId].find(
+    (item: ITodoItem) => item.id === +id
+  );
 
-// // enum - перечисление
-enum Colors {
-  Red = "#ff0000",
-  Green = "#00ff00",
-  Blue = "#0000ff",
-}
+  data[listId] = data[listId].filter((item: ITodoItem) => item.id !== +id);
 
-const enum Colors2 {
-  Red = "#ff0000",
-  Green = "#00ff00",
-  Blue = "#0000ff",
-}
+  if (item) {
+    data[listPushId].push(item);
+  }
 
-let color: Colors = Colors.Green;
-let color2: Colors2 = Colors2.Green;
-
-// // interface - Для создания структур данных, которые определяют форму объектов.
-// const getUserInfo1 = (user: IUserInfo): IUserInfo => {
-//   return {
-//     email: user.email,
-//     password: user.password,
-//   };
-// };
-
-// const getUserInfo = ({ email, password }: IUserInfo): IUserInfo => {
-//   return { email, password };
-// };
-
-// getUserInfo(userInfo);
-interface IUserInfo {
-  email: string;
-  readonly password: string;
-  phone?: string;
-  pets?: string[];
-}
-
-const userInfo: IUserInfo = {
-  email: "qwer@pol.com",
-  password: "1234",
-  phone: "+380123456789",
-  pets: ["cat", "dog"],
+  drawList(data, restore ? "todo" : listId);
+  drawList(data, "deleted");
 };
 
-interface IUser extends IUserInfo {
-  name: string;
-  age: number;
-}
+const addToDoHandler = (
+  event: IEvent,
+  column: Element,
+  data: IData,
+  columnId: TColumnIds
+): void => {
+  event.preventDefault();
+  const title: HTMLInputElement | null = column.querySelector(
+    `#${columnId}-title`
+  );
+  const description: HTMLInputElement | null = column.querySelector(
+    `#${columnId}-description`
+  );
 
-let user: IUser = {
-  name: "Ivan",
-  email: "qwer@pol.com",
-  password: "1234",
-  age: 25,
+  if (!title || !description) return;
+
+  data[columnId].push({
+    id: Date.now(),
+    title: title.value,
+    description: description.value,
+  });
+
+  const form: Element | null = column.querySelector(".list-form");
+  if (form) {
+    form.classList.add("form-hidden");
+  }
+
+  drawList(data, columnId);
 };
 
-user.name = "John";
-// user.password = "12345"; // ошибка
+const toggleEditFormHandler = (
+  event: IEvent,
+  data: IData,
+  columnId: TColumnIds
+): void => {
+  const element = event.target as HTMLElement;
+  const listItem: Element | null = element.closest(".list-item");
 
-interface FromServer {
-  [key: string]: string;
-}
+  if (!listItem) return;
 
-const serverResults: FromServer = {
-  email: "qwer@pol.com",
-  password: "1234",
-  phone: "+380123456789",
+  const editForm: Element | null = listItem.querySelector(".edit-form");
+
+  if (editForm) {
+    editForm.remove();
+    return;
+  }
+
+  const id: string = listItem.id;
+  const item: ITodoItem | undefined = data[columnId].find(
+    (item: ITodoItem) => item.id === +id
+  );
+
+  if (item) {
+    listItem.insertAdjacentHTML(
+      "beforeend",
+      `<form class="edit-form">
+        <input type="text" name="title" value="${item.title}">
+        <input type="text" name="description" value="${item.description}">
+        <button class="button save" type="submit">Save</button>
+      </form>`
+    );
+  }
 };
 
-// Интерфейс может быть использован в выражении extends или implements, а псевдоним для литерала объектного типа — нет.
-// Интерфейс может иметь несколько объединённых объявлений, а при использовании ключевого слова type эта возможность не доступна.
+const saveEditFormHandler = (
+  event: IEvent,
+  data: IData,
+  columnId: TColumnIds
+): void => {
+  event.preventDefault();
+  const element = event.target as HTMLElement;
 
-// generics - обобщения
-function getter(data: any): any {
-  return data;
-}
+  const listItem: Element | null = element.closest(".list-item");
+  if (!listItem) return;
 
-function genericGetter<T>(data: T): T {
-  return data;
-}
+  const listItemId: string = listItem.id;
 
-const newGetter = genericGetter<string>("Hello TypeScript!");
-const newGetter2 = genericGetter<number>(5);
-// console.log("generic-STRING", newGetter);
-// console.log("generic-NUMBER", newGetter2);
+  const item: ITodoItem | undefined = data[columnId].find(
+    (item: ITodoItem) => item.id === +listItemId
+  );
+  const itemIndex: number = data[columnId].findIndex(
+    (item: ITodoItem) => item.id === +listItemId
+  );
 
-// interfese generic
-// interface ILength<T> {
-//   length: T;
-// }
+  const title: HTMLInputElement | null =
+    listItem.querySelector(`input[name="title"]`);
+  const description: HTMLInputElement | null = listItem.querySelector(
+    `input[name="description"]`
+  );
 
-// const newLength: ILength<string> = {
-//   length: "20",
-// };
+  if (!title || !description || !item) return;
 
-// const newLength2: ILength<number> = {
-//   length: 20,
-// };
+  data[columnId].splice(itemIndex, 1, {
+    id: +listItemId,
+    title: title.value,
+    description: description.value,
+  });
 
-// // union - объединение типов
-// type TCustom = string | number;
-// let newVar: TCustom = 1;
+  const editForm: Element | null = listItem.querySelector(".edit-form");
 
-// typeguard - проверка типов
-const enum USER_ROLES {
-  ADMIN = "ADMIN",
-  GENERAL = "GENERAL",
-}
-
-interface IAdmin {
-  name: string;
-  role: USER_ROLES;
-  isAdmin: boolean;
-}
-
-interface IUser12 {
-  name: string;
-  age: number;
-  role: USER_ROLES;
-  isAdmin: boolean;
-}
-
-const userGeneral = {
-  name: "John",
-  age: 25,
-  role: USER_ROLES.GENERAL,
-  isAdmin: false,
+  editForm?.remove();
+  drawList(data, columnId);
 };
 
-// const superUser = {
-//   name: "Jack",
-//   age: 22,
-//   role: USER_ROLES.ADMIN,
-//   isAdmin: true,
-// };
+const nextHandler = (
+  event: IEvent,
+  data: IData,
+  columnId: TColumnIds
+): void => {
+  const element = event.target as HTMLElement;
 
-function redirect(usr: IAdmin | IUser12) {
-  if (usr.isAdmin) {
-    // if (usr.role === USER_ROLES.ADMIN) {
-    console.log("Redirect to admin panel");
+  const id: string | undefined = element.closest(".list-item")?.id;
+  if (!id) return;
+
+  const item: ITodoItem | undefined = data[columnId].find(
+    (item: ITodoItem) => item.id === +id
+  );
+
+  data[columnId] = data[columnId].filter((item: ITodoItem) => item.id !== +id);
+
+  if (!item) return;
+
+  if (columnId === "todo") {
+    data.inProgress.push(item);
+  } else if (columnId === "inProgress") {
+    data.done.push(item);
   } else {
-    console.log("Redirect to user panel");
-  }
-}
-
-// class
-interface IUserClassConstructor {
-  name: string;
-  surname: string;
-  age: number;
-}
-
-interface IAdminClassConstructor extends IUserClassConstructor {
-  role: string;
-}
-
-class User {
-  name: string; // доступно везде - по умолчанию все свойства и методы public
-  protected surname: string; // доступно только внутри класса и наследникам
-  age: number;
-  private secretMessage: string = "SECRET"; // доступно только внутри класса
-
-  constructor({ name, surname, age }: IUserClassConstructor) {
-    // props: IUserClassConstructor
-    this.name = name;
-    this.surname = surname;
-    this.age = age;
+    data.deleted.push(item);
   }
 
-  getFullName(): string {
-    return `${this.name} ${this.secretMessage}`;
-  }
-}
-
-let superUser: User = new User({
-  name: "John",
-  surname: "Doe",
-  age: 25,
-});
-
-class Admin extends User {
-  role: string;
-
-  constructor(props: IAdminClassConstructor) {
-    super({
-      name: props.name,
-      surname: props.surname,
-      age: props.age,
-    });
-
-    this.role = props.role;
-  }
-
-  getFullName(): string {
-    return `${this.name} ${this.surname}`;
-  }
-}
-
-let admin: Admin = new Admin({
-  name: "John",
-  surname: "Doe",
-  age: 25,
-  role: "admin",
-});
-
-// admin.surname = "Smith"; // доступно только внутри класса и наследникам
-
-// extends - наследование
-// implements - реализация интерфейса
-
-// class implements interface
-interface IUserImplement {
-  surname: string;
-  age: number;
-  getFullSurname(): string;
-}
-
-class UserA implements IUserImplement {
-  surname: string;
-  age: number;
-
-  constructor(props: { surname: string; age: number }) {
-    this.surname = props.surname;
-    this.age = props.age;
-  }
-
-  getFullSurname(): string {
-    return `${this.surname}`;
-  }
-}
-
-interface IQwer {
-  surname: string;
-  age: number;
-  getInfo(id: string): string;
-}
-
-const qwer = {
-  surname: "qwer",
-  age: 25,
-
-  getInfo(id: string): string {
-    return `${this.surname} ${id}`;
-  },
+  drawList(data, columnId);
+  drawList(
+    data,
+    columnId === "todo"
+      ? "inProgress"
+      : columnId === "inProgress"
+      ? "done"
+      : "deleted"
+  );
 };
 
-// namespace - Интерфейсы, классы, функции и переменные могут быть включены в пространство имен, чтобы обеспечить набор связанных функций.
-namespace Utils {
-  export function isEmpty(data: any): boolean {
-    return !data;
-  }
-  export function isUndefined(data: any): boolean {
-    return typeof data === "undefined";
-  }
-  export function isNull(data: any): boolean {
-    return data === null;
-  }
-}
+const init = (): void => {
+  let data: IData = {
+    todo: [],
+    inProgress: [],
+    done: [],
+    deleted: [],
+  };
 
-Utils.isEmpty("Hello");
-Utils.isUndefined("Hello");
-Utils.isNull("Hello");
+  const columns: Element[] = [...document.querySelectorAll(".сolumn")];
+  const deleted: Element | null = document.querySelector("#deleted");
 
-// utilites types - утилиты
-// Partial - делает все свойства в объекте необязательными
-interface IUserPartial {
-  name: string;
-  age: number;
-}
+  columns.forEach((column: Element) => {
+    if (column.id !== "deleted") {
+      column.addEventListener("click", (event) => {
+        const columnId = column.id as TColumnIds;
 
-let userPartial: Partial<IUserPartial> = {
-  name: "John",
+        eventCommonHandler(event, data, column, columnId);
+      });
+    }
+  });
+
+  deleted?.addEventListener("click", (event) => {
+    const element = event.target as HTMLElement;
+
+    if (element.classList.contains("restore")) {
+      deleteAndRestoreHandler(event, data, "deleted", true);
+    }
+  });
 };
 
-// Readonly - делает все свойства в объекте только для чтения
-interface IUserReadonly {
-  name: string;
-  age: number;
-}
-
-let userReadonly: Readonly<IUserReadonly> = {
-  name: "John",
-  age: 25,
-};
-// userReadonly.name = "Smith"; // ошибка
-
-// Record - создает объект из двух других объектов
-interface IUserRecord {
-  name: string;
-  age: number;
-}
-let userRecord: Record<string, IUserRecord> = {
-  "user-1": { name: "John", age: 25 },
-  "user-2": { name: "Smith", age: 30 },
-};
-// console.log(userRecord);
-
-// Pick - создает подмножество объекта
-interface IUserPick {
-  name: string;
-  age: number;
-  email: string;
-}
-
-let userPick: Pick<IUserPick, "name" | "age"> = {
-  name: "John",
-  age: 25,
-};
-
-// Omit - создает подмножество объекта
-interface IUserOmit {
-  name: string;
-  age: number;
-  email: string;
-}
-
-let userOmit: Omit<IUserOmit, "email"> = {
-  name: "John",
-  age: 25,
-};
-
-// Exclude - исключает из типа T типы, которые можно присвоить типу U
-type T = string | number;
-let newVar2: Exclude<T, number> = "Hello";
-
-// Extract - извлекает из типа T типы, которые можно присвоить типу U
-type T2 = string | number;
-let newVar3: Extract<T2, number> = 1;
-
-// // NonNullable - исключает из типа T тип null и undefined
-type T3 = string | number | null | undefined;
-let newVar4: NonNullable<T3> = 1;
-
-// Parameters - получает типы параметров функции
-function sum(a: number, b: number, c: string): number {
-  return a + b;
-}
-type T4 = Parameters<typeof sum>; // [number, number, string]
-
-// ReturnType - получает тип возвращаемого значения функции
-function sum2(a: number, b: number): string {
-  return `${a}`;
-}
-type T5 = ReturnType<typeof sum2>; // string
-
-// InstanceType - получает тип экземпляра класса
-class UserB {
-  name: string;
-  constructor(name: string) {
-    this.name = name;
-  }
-}
-type T6 = InstanceType<typeof UserB>; // UserB
-
-// ThisType - указывает на тип this внутри объекта
-type T7 = {
-  name: string;
-  age: number;
-  getFullName(this: T7): string;
-};
+init();
