@@ -13,6 +13,24 @@
   transition: all 0.3s ease-in-out;
 }
 
-.button:hover {
-  background-color: #e0e0e0;
+.red {
+  background-color: #f44336;
+  border: 1px solid #f44336;
+  color: #fff;
+}
+
+.blue {
+  background-color: #2196f3;
+  border: 1px solid #2196f3;
+  color: #fff;
+}
+
+.red:hover {
+  background-color: #d32f2f;
+  border: 1px solid #d32f2f;
+}
+
+.blue:hover {
+  background-color: #1976d2;
+  border: 1px solid #1976d2;
 }
