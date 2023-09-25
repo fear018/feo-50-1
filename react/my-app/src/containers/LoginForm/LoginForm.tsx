@@ -23,13 +23,12 @@ export const LoginForm = ({ setLoginDataHandler }: IProps) => {
     setLoginDataHandler({ login, password });
   };
 
-  console.log("LOGIN=>", login);
   return (
     <form className="form" onSubmit={onSubmitHandler}>
       <h3>Login</h3>
       <InputText placeholder="Login: " onChange={loginHandler} />
       <InputText placeholder="Password: " onChange={passwordHandler} />
-      <Button type="submit" bColor="blue">
+      <Button type="submit" bcolor="blue">
         Submit
       </Button>
     </form>

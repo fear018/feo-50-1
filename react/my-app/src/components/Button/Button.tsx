@@ -1,23 +1,30 @@
 import { ReactNode } from "react";
-import "./Button.css";
+import { ButtonStyled } from "./styles";
 
 interface IProps {
-  bColor: string;
+  className?: string;
+  bcolor: string;
   children: ReactNode;
   type?: "button" | "submit" | "reset";
   onClick?: () => void;
 }
 
 export const Button = ({
-  bColor,
+  className,
+  bcolor,
   children,
   type = "button",
   onClick,
 }: IProps) => {
   return (
-    <button className={`button ${bColor}`} type={type} onClick={onClick}>
+    <ButtonStyled
+      className={className}
+      type={type}
+      bcolor={bcolor}
+      onClick={onClick}
+    >
       {children}
-    </button>
+    </ButtonStyled>
   );
 };
 

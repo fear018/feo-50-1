@@ -1,36 +1,31 @@
-import { Link } from "../../components/Link/Link";
-
-import "./Header.css";
+import { HeaderStyled, NavLinkCustom } from "./styles";
 
 export const Header = () => {
   const links = [
     {
       id: 1,
-      href: "/home",
-      color: "red",
+      href: "/",
       children: "Home",
     },
     {
       id: 2,
       href: "/about",
-      color: "blue",
       children: "About",
     },
     {
       id: 3,
       href: "/contacts",
-      color: "purple",
       children: "Contacts",
     },
   ];
 
   return (
-    <header className="header">
-      {links.map((link) => (
-        <Link key={link.id} href={link.href} color={link.color}>
-          {link.children}
-        </Link>
+    <HeaderStyled>
+      {links.map(({ id, href, children }) => (
+        <NavLinkCustom key={id} to={href}>
+          {children}
+        </NavLinkCustom>
       ))}
-    </header>
+    </HeaderStyled>
   );
 };
