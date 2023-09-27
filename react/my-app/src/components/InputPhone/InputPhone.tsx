@@ -4,13 +4,19 @@ import { InputStyled, Wrapper, ErrorMessage } from "./styles";
 interface IProps {
   error?: string;
   placeholder?: string;
+  mask: string;
 }
 
-export const InputText = forwardRef(
-  ({ placeholder, error, ...rest }: IProps, ref) => {
+export const InputPhone = forwardRef(
+  ({ placeholder, mask, error, ...rest }: IProps, ref) => {
     return (
       <Wrapper>
-        <InputStyled placeholder={placeholder} ref={ref} {...rest} />
+        <InputStyled
+          placeholder={placeholder}
+          mask={mask}
+          // ref={ref}
+          {...rest}
+        />
         {error && <ErrorMessage>{error}</ErrorMessage>}
       </Wrapper>
     );

@@ -29,8 +29,8 @@ export const ToDoListForm = ({ setToDoDataHandler }: IProps) => {
   return (
     <form className="form" onSubmit={onSubmitHandler}>
       <h3>To Do List Form</h3>
-      <InputText placeholder="Title: " onChange={titleHandler} />
-      <InputText placeholder="Description: " onChange={descriptionHandler} />
+      {/* <InputText placeholder="Title: " onChange={titleHandler} />
+      <InputText placeholder="Description: " onChange={descriptionHandler} /> */}
       <Button type="submit" bcolor="blue">
         Submit
       </Button>

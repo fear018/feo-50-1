@@ -4,5 +4,5 @@ export interface ILoginData {
 }
 
 export interface IProps {
-  setLoginDataHandler: (data: ILoginData) => void;
+  setLoginDataHandler?: (data: ILoginData) => void;
 }
